@@ -1,7 +1,7 @@
 import data
 import math
 import sys
-from model import BehavioralCloning
+from model_definition import BehavioralCloning
 
 BATCH_SIZE       = 256
 AUGMENT_DATA     = False

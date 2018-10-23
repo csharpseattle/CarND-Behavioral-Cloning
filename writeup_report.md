@@ -7,13 +7,13 @@ Chris Sharp
 In this project I train a Keras model to provide steering data to a car in a driving simulator.  The [provided simulator](https://github.com/udacity/self-driving-car-sim) was used to gather training data from the 2 included tracks.  Images were converted to BGR, cropped, resized, and the data set distribution was balanced before input to the neural network. The resulting model could then be used to steer the car autonomously down the road using the simulator's 'Autonomous Mode'
 
 The main files in this project are:
-* `p4.py` - Script used to train the model
-* `model.py` - Model definition script
+* `model.py` - Script used to train the model
+* `model_definition.py` - Model definition script
 * `data.py` - Utilities used to read data, preprocess data, augment data, etc.
 * `drive.py` - Script to drive the car
 * `model.h5` - The trained Keras model
-* `track1.mp4` - A video recording of the vehicle driving around the basic track
-* `track2.mp4` - A video recording of the vehicle driving around the mountain track
+* `video1.mp4` - A video recording of the vehicle driving around the basic track
+* `video2.mp4` - A video recording of the vehicle driving around the mountain track
 
 
 ### Collecting Data
@@ -45,7 +45,7 @@ One improvement that was found to be particularly effective was to fix the poor 
 ### Model
 ---
 
-The empirical process of finding the correct neural network can be a lesson in frustration.  I started with LeNet [1] and tried countless modifications.  Feeling the need for something slightly more powerful to increase nonlinearity and work for both tracks I moved on to a modified NVIDIA architecture[2].  Image data is preprocessed as described above before being normalized in the first layer.  The network consists of 5 Convolutional layers with max pooling and 5 fully connected layers.  Dropout layers were used in between the fully connected layers to reduce overfitting.  An Adam optimizer was used with a learning rate of 1e-4. Code for the model can be found in `model.py`
+The empirical process of finding the correct neural network can be a lesson in frustration.  I started with LeNet [1] and tried countless modifications.  Feeling the need for something slightly more powerful to increase nonlinearity and work for both tracks I moved on to a modified NVIDIA architecture[2].  Image data is preprocessed as described above before being normalized in the first layer.  The network consists of 5 Convolutional layers with max pooling and 5 fully connected layers.  Dropout layers were used in between the fully connected layers to reduce overfitting.  An Adam optimizer was used with a learning rate of 1e-4. Code for the model can be found in `model_definition.py`
 
 The final network is as follows:
 
@@ -72,10 +72,10 @@ The final network is as follows:
 ### Training
 ---
 
-Training the network is done using the python script `p4.py`.  By default the script runs for 10 epochs although the script will take a different number of epochs as a parameter.  The script by default allocates 80% of the data set to training and 20% to validation sets.
+Training the network is done using the python script `model.py`.  By default the script runs for 10 epochs although the script will take a different number of epochs as a parameter.  The script by default allocates 80% of the data set to training and 20% to validation sets.
 
 ```
-python p4.py 20  # train for 20 epochs.
+python model.py 20  # train for 20 epochs.
 ```
 
 The script reads the image data from the CSV file, performs any augmentation and distribution balancing, and starts training on the data set.  Due to the possibility that the entire collection of image files might not fit into memory all at once the data set is separated into batches by a Keras generator.  The generator creates batches of `BATCH_SIZE` images, reading image data and augmenting the images on the fly. See the function `get_generator()`, line 383, of the file `data.py` for generator code.  Generators were used for both training and validation sets.
