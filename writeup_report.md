@@ -19,7 +19,7 @@ The main files in this project are:
 ### Collecting Data
 ---
 
-Data collection was done using the simulator in 'Training Mode.'  After much trial and error I found that it was not necessary to gather images from a full lap around each track. For the first track I drove just past the bridge to the first dirt patch and for the mountain track I drove only half-way around.  Successfully driving autonomously around the entire track while only training on a portion of it was an indication to me that the model generalized to all track conditions and did not overfit the training data.  In the end I gathered over 3500 images from each track for a total data set size of 7650 images.
+Data collection was done using the simulator in 'Training Mode.'  After much trial and error I found that it was not necessary to gather images from a full lap around each track. For the first track I drove just past the bridge to the first dirt patch and for the mountain track I drove only half-way around.  Using the mouse for steering and being careful to drive steady down the center of the road provided me with good data. The couple of problem areas on each track were addressed by training the vehicle recovering from the sides of the road.  Successfully driving autonomously around the entire track while only training on a portion of it was an indication to me that the model generalized to all track conditions and did not overfit the training data.  In the end I gathered over 3500 images from each track for a total data set size of 7650 images.
 
 ### Preprocessing Images
 ---
@@ -79,6 +79,12 @@ python model.py 20  # train for 20 epochs.
 ```
 
 The script reads the image data from the CSV file, performs any augmentation and distribution balancing, and starts training on the data set.  Due to the possibility that the entire collection of image files might not fit into memory all at once the data set is separated into batches by a Keras generator.  The generator creates batches of `BATCH_SIZE` images, reading image data and augmenting the images on the fly. See the function `get_generator()`, line 383, of the file `data.py` for generator code.  Generators were used for both training and validation sets.
+
+Validation accuracy was not a good indicator of the performance of the network.  It was better to watch for overfitting by comparing the training mean squared error (MSE) with the validation MSE.  A climbing validation MSE while the training MSE was still decreasing was a sign that the model was overfitting.  Dropout was used to combat this but I also limited the number of epochs to get the best performing model.
+
+### Videos
+
+`video1.mp4` is the recording of the vehicle going around the basic track.  `video2.mp4` is the recording of the vehicle going around the mountain track.
 
 ### References
 ---
